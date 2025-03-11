@@ -20,8 +20,8 @@ export class RestService {
 
     constructor(private http: HttpClient) {
 
-        localStorage.setItem("targetHostName", "ucapi.paytequtils.com");
-        this.hostName = localStorage.getItem("targetHostName") || "ucapi.paytequtils.com";
+        localStorage.setItem("targetHostName", "uc.paytequtils.com");
+        this.hostName = localStorage.getItem("targetHostName") || "uc.paytequtils.com";
 
         if (this.isDevelopment) { 
             this.url = `https://${this.hostName}:5116/api/Services/`;
