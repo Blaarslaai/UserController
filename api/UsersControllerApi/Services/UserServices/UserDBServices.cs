@@ -1,6 +1,7 @@
 ﻿using BaseProjectApi.Models;
 using BaseProjectApi.Services.UserService;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -40,7 +41,13 @@ namespace BaseProjectApi.Services.UserServices
                     using (SqlCommand command = new SqlCommand("dbo.InsertUser", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        
+
+                        // Add parameters for the stored procedure
+                        command.Parameters.AddWithValue("@UserId", usrm.UserId);
+                        command.Parameters.AddWithValue("@UserName", usrm.UserName);
+                        command.Parameters.AddWithValue("@UserToken", usrm.UserToken);
+                        command.Parameters.AddWithValue("@Epoc", usrm.Epoc);
+
                         // Open connection and execute command
                         connection.Open();
                         command.ExecuteNonQuery();
@@ -86,6 +93,8 @@ namespace BaseProjectApi.Services.UserServices
                                     id = reader.GetInt32(reader.GetOrdinal("id")), // Adjust this if necessary
                                     UserId = reader.GetString(reader.GetOrdinal("UserId")), // Adjust this if necessary
                                     UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                                    UserToken = reader.GetString(reader.GetOrdinal("UserToken")),
+                                    Epoc = reader.GetString(reader.GetOrdinal("Epoc")),
                                     DateTouched = reader.GetDateTime(reader.GetOrdinal("DateTime"))
                                 };
 
@@ -179,11 +188,13 @@ namespace BaseProjectApi.Services.UserServices
 
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("dbo.__GetAllUsers", connection))
+                    using (SqlCommand command = new SqlCommand("dbo.GetAllUsers", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@Offset", payload.OffSetNumber);
                         command.Parameters.AddWithValue("@FetchRows", payload.LimitedNumber);
+
+                        connection.Open();
 
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
@@ -193,6 +204,7 @@ namespace BaseProjectApi.Services.UserServices
                                 {
                                     id = reader.GetInt32(reader.GetOrdinal("id")), // Adjust this if necessary
                                     UserId = reader.GetString(reader.GetOrdinal("UserId")), // Adjust this if necessary
+                                    UserName = reader.GetString(reader.GetOrdinal("UserName")), // Adjust this if necessary
                                     UserToken = reader.GetString(reader.GetOrdinal("UserToken")),
                                     //Epoc = reader.GetString(reader.GetOrdinal("Epoc")),
                                     DateTouched = reader.GetDateTime(reader.GetOrdinal("DateTime"))
@@ -320,7 +332,7 @@ namespace BaseProjectApi.Services.UserServices
                 /* The rest stored procedures here we are submitting data */
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("dbo.LetsSeeif you canDelete?", connection))
+                    using (SqlCommand command = new SqlCommand("dbo.DeleteAllUsers", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 

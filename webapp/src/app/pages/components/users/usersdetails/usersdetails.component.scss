@@ -67,6 +67,24 @@
 
         }
 
+        &-col3 {
+            height: 100%;
+            flex: 1 0 500px;
+            padding-left: 10px;
+
+            &-input {
+                height: 36px;
+                width: 800px;
+                outline: none;
+                border-style: none;
+                border-radius: 25px;
+                // padding-top: 10px;
+                padding-left: 16px;
+                font-size: 12px;
+            }
+
+        }
+
         &-button {
             height: 100%;
             width: 370px;

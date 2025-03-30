@@ -52,6 +52,10 @@ namespace BaseProjectApi.Controllers
                     _response = await _ius.RegisterUser(uiReq);
                     break;
                 case "UserLogin":
+                    _response = await _ius.UserLogin(uiReq);
+                    break;
+                case "UserLogout":
+                    _response = await _ius.UserLogout();
                     break;
                 case "GetSingleUser":
                     _response = await _ius.GetSingleUser(uiReq);
@@ -60,11 +64,13 @@ namespace BaseProjectApi.Controllers
                     _response = await _ius.GetAllUsers(uiReq);
                     break;
                 case "UpdateUser":
+                    _response = await _ius.UpdateUser(uiReq);
                     break;
                 case "DeleteSingleUser":
                     _response = await _ius.DeleteSingleUser(uiReq);
                     break;
                 case "DeleteAllUsers":
+                    _response = await _ius.DeleteAllUsers(uiReq);
                     break;
                 case "DecryptUserToken":
                     _response = await _ius.DecryptUserToken(uiReq);

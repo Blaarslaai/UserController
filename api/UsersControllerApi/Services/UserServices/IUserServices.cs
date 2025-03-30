@@ -6,6 +6,7 @@ namespace BaseProjectApi.Services.UserServices
     {
         Task<ServiceModel> RegisterUser(RequestModel uireq);
         Task<ServiceModel> UserLogin(RequestModel uireq);
+        Task<ServiceModel> UserLogout();
         Task<ServiceModel> GetSingleUser(RequestModel UserName);
         Task<ServiceModel> GetAllUsers(RequestModel uireq);
         Task<ServiceModel> UpdateUser(RequestModel uireq);

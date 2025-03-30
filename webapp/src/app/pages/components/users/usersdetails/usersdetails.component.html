@@ -1,81 +1,87 @@
 <div class="main">
-    <div class="header">
-        <span class="header-text">Users Profile</span>
-
+  <div class="header">
+    <span class="header-text">Users Profile</span>
+  </div>
+  <div class="profile">
+    <div class="profile-header">
+      <span class="profile-header-text">
+        User Profile of {{ UserModel.usersname }}
+      </span>
     </div>
-    <div class="profile">
-        <div class="profile-header">
-            <span class="profile-header-text">
-                User Profile of ##NAME##
-            </span>
-        </div>
-        <div class="spacer"></div>
-        <div class="profile-row">
-            <div class="profile-row-col1">
-                <span class="profile-row-col1-text">User ID:</span>
-            </div>
-            <div class="profile-row-col2">
-                <input 
-                [(ngModel)]="UserModel.userId"
-                type="text" class="profile-row-col2-input">
-            </div>
-        </div>
-        <div class="profile-row">
-            <div class="profile-row-col1">
-                <span class="profile-row-col1-text">Users Names:</span>
-            </div>
-            <div class="profile-row-col2">
-                <input 
-                [(ngModel)]="UserModel.usersname"
-                type="text" class="profile-row-col2-input">
-            </div>
-        </div>
-        <div class="profile-row">
-            <div class="profile-row-col1">
-                <span class="profile-row-col1-text">Password:</span>
-            </div>
-            <div class="profile-row-col2">
-                <input 
-                [(ngModel)]="UserModel.password"
-                type="text" class="profile-row-col2-input">
-            </div>
-        </div>
-        <div class="profile-row">
-            <div class="profile-row-col1">
-                <span class="profile-row-col1-text">Email Address:</span>
-            </div>
-            <div class="profile-row-col2">
-                <input 
-                [(ngModel)]="UserModel.emailAddress"
-                type="text" class="profile-row-col2-input">
-            </div>
-        </div>
-        <div class="profile-row">
-            <div class="profile-row-col1">
-                <span class="profile-row-col1-text">Contact Number:</span>
-            </div>
-            <div class="profile-row-col2">
-                <input 
-                [(ngModel)]="UserModel.contactNumber"
-                type="text" class="profile-row-col2-input">
-            </div>
-        </div>
-        <div class="profile-row"
-        *ngIf="ViewState"
-        [ngStyle]="{ 'padding-top': '10px'}">
-            <div class="profile-row-button">
-                <button
-                (click)="UpdateProfile()"
-                class="profile-row-button-btn">
-                    Update Profile
-                </button>
-                <button
-                (click)="DeleteProfile()"
-                class="profile-row-button-btn">
-                    Delete Profile
-                </button>
-            </div>
-        </div>
+    <div class="spacer"></div>
+    <div class="profile-row">
+      <div class="profile-row-col1">
+        <span class="profile-row-col1-text">User ID:</span>
+      </div>
+      <div class="profile-row-col2">
+        <input
+          [(ngModel)]="UserModel.userId"
+          type="text"
+          class="profile-row-col2-input"
+        />
+      </div>
     </div>
-
+    <div class="profile-row">
+      <div class="profile-row-col1">
+        <span class="profile-row-col1-text">Users Names:</span>
+      </div>
+      <div class="profile-row-col2">
+        <input
+          [(ngModel)]="UserModel.usersname"
+          type="text"
+          class="profile-row-col2-input"
+        />
+      </div>
+    </div>
+    <div class="profile-row">
+      <div class="profile-row-col1">
+        <span class="profile-row-col1-text">Password:</span>
+      </div>
+      <div class="profile-row-col2">
+        <input
+          [(ngModel)]="UserModel.password"
+          type="text"
+          class="profile-row-col2-input"
+        />
+      </div>
+    </div>
+    <div class="profile-row">
+      <div class="profile-row-col1">
+        <span class="profile-row-col1-text">Email Address:</span>
+      </div>
+      <div class="profile-row-col2">
+        <input
+          [(ngModel)]="UserModel.emailAddress"
+          type="text"
+          class="profile-row-col3-input"
+        />
+      </div>
+    </div>
+    <div class="profile-row">
+      <div class="profile-row-col1">
+        <span class="profile-row-col1-text">Contact Number:</span>
+      </div>
+      <div class="profile-row-col2">
+        <input
+          [(ngModel)]="UserModel.contactNumber"
+          type="text"
+          class="profile-row-col2-input"
+        />
+      </div>
+    </div>
+    <div
+      class="profile-row"
+      *ngIf="ViewState"
+      [ngStyle]="{ 'padding-top': '10px' }"
+    >
+      <div class="profile-row-button">
+        <button (click)="UpdateProfile()" class="profile-row-button-btn">
+          Update Profile
+        </button>
+        <button (click)="DeleteProfile()" class="profile-row-button-btn">
+          Delete Profile
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

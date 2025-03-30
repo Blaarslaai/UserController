@@ -1,135 +1,181 @@
 ![Head Logo](documents/readmeHeader.png)
+
 # Welcome to this project
-## Objectives of this project
-Please note the following, this project is the Assessment Test Project for Junior applicants, as you work through this project you will see that most of the working project is here, we remove parts of the application, your objective is to analyze the application and fill in the missing parts.
 
-The database part is not provided because it lives on your dev station, you should be able to analyze the application and design your database accordingly. 
+## Hello from the other side...
 
-This test will test your skills in the following way:
-1. css/sass Knowledge
-2. html Knowledge
-3. typescript Knowledge
-4. .net Knowledge
-5. database Knowledge
-6. Debugging Knowledge
+My approach to this project was the following:
 
-# The Process
-1. You will receive a email, with a git link. 
-2. Create a Git Repo (your own) and ensure that the project becomes part of it,
-3. Open and Install webapp packages and run application, in browser navigate to given url,
-4. Open api restore the nuGet packages, rebuild, once complete Success run application,
-5. Navigate to the api/UserControlApi/Scripts, run the queries in the manager to create the components,
-6. Investigate and Debug the application, find the missing parts and fill in.
-7. Create your own Git Readme.md in git and promote your work,
-8. On Completion send us the git repo link of delivery and inspection,
-9. If you are late you will be disqualified,
+1. Debug and Fix Issues, basically get both projects running.
+2. Deploy to IIS
+3. Deploy to Docker
 
+Extra things I identified:
 
-# OR 
+- Create DB
 
-You may decide to pack this all on and do your own thing but, your scope here will be to learn our way of doing things so we would not recommend that but, we are doing this to measure your skill level.
+I always start with debugging as it is a system I am unfamiliar with, therefore I first need to see how things work and whether or not I need to accomplish extra tasks.
 
-Following, is examples of the app, ensure that the app looks the same with functionality.<br>
-You will have 4 days to complete it, from the day you received the mail.<br>
-You may use any AI that you need to complete this Assessment Test.<br>
+## Step 1: Debug and Fix Existing Issues
 
-Good Luck!!! And have fun!!!
+### api
 
-## You will learn the following
-### Angular Web-ui
-The learner will be exposed to and required to learn the following disciplines:
-1. css
-2. html
-3. typescript
-4. http-client
-5. modeling
+Within the file **ServicesController.cs** the following had to be fixed:
 
-### Web-api .Net
-The learner will be exposed to and required to learn the following disciplines:
-1. Web-api setup and initiation
-2. Controller Principals,
-3. Service Principals,
-4. DataBase Principals,
+```C#
+_response = await _ius.UserLogin(uiReq);
+_response = await _ius.UpdateUser(uiReq);
+_response = await _ius.DeleteAllUsers(uiReq);
+```
 
-### DabaBase MSSQL
-The learner will be exposed to and required to learn the following disciplines:
-1. Table Structure Principals
-2. Stored Procedure Principals
+Within the file **IUserDBServices.cs** the following had to be fixed:
 
-## Your Tasks and Targets
-### Angular 
-1. Create a new WebApi in your root directory
-2. Create a components/Header component
-3. Create a pages/home component
-3. Create a pages/application component
-3. Create a pages/components/userlist component
-3. Create a pages/components/userdetails component
+```C#
+Task<ServiceModel> UserLogin(string UserName);
+Task<ServiceModel> GetAllUsers(SelectionFilterModel payload);
+Task<ServiceModel> DeleteSingleUser(string UserId);
+```
 
-## Home Page / User Login
-![HomeLoginPage](documents/homeLoginPage.png)
+Within the file **UserDBServices.cs** the following had to be fixed:
 
-### Focus on the following
-1. The login box must always remain in the middle of he page,
-2. Ensure framing is done for final visual objects,
-3. Use sass for all of the above,
-4. All input Boxes to be linked with variables,
+In the method **RegisterUser** the following has to be added:
 
-## Home Page / User Register
-![HomeRegisterPage](documents/homeRegisterPage.png)
+```C#
+// Add parameters for the stored procedure
+command.Parameters.AddWithValue("@UserId", usrm.UserId);
+command.Parameters.AddWithValue("@UserName", usrm.UserName);
+command.Parameters.AddWithValue("@UserToken", usrm.UserToken);
+command.Parameters.AddWithValue("@Epoc", usrm.Epoc);
+```
 
-### Focus on the following
-1. The login box must always remain in the middle of he page,
-2. Ensure framing is done for final visual objects,
-3. Use sass for all of the above,
-4. All input Boxes to be linked with variables,
+In the method **UserLogin** the following has to be added:
 
-## Application
-![ApplicationBasePage](documents/applicationHomePage.png)
-### Focus on the following
-1. Build header,
-2. Left side buttons navigation,
-3. Navigation to be done by changing var values, no rooting,
-4. Right side, housing for target page
+```C#
+UserToken = reader.GetString(reader.GetOrdinal("UserToken")),
+Epoc = reader.GetString(reader.GetOrdinal("Epoc")),
+```
 
-## UserList Page
-![UserListPage](documents/userListPage.png)
-### Focus on the following
-1. Navigate Admin -> Users -> open UserList Page,
-2. Create a Header and a Table object,
-3. Create a Previous and Next Indexing Control,
-4. Only Collect rows as per visible spacing for rows,
-5. You may use mat-icon for icons, the rest must be self designed,
+In the method **GetAllUsers** the following has to changed and added:
 
-## UserList Page
-![UserProfilePage](documents/userDetailsPage.png)
-### Focus on the following
-1. You need a view icon to go into Profile view, this will take away the update and delete button,
-2. In edit profile mode the buttons will be visible,
+```C#
+using (SqlCommand command = new SqlCommand("dbo.GetAllUsers", connection))
+connection.Open();
+UserName = reader.GetString(reader.GetOrdinal("UserName")),
+```
 
-# Your BackEnd Requirments
-# The Controller and Functions
-![bckendController](documents/bckendController.png)
-### Focus on the following
-1. These are the functions that we require,
-2. Create a Interface for the services and imbed it into the Controller,
-3. Inter Communication to take place with a ServiceModel,
+In the method **DeleteAllUsers** the following has to be fixed:
 
-# The IUserServices and Functions
-![bckendService](documents/iservicesLayout.png)
+```C#
+using (SqlCommand command = new SqlCommand("dbo.DeleteAllUsers", connection))
+```
 
-# The IDBUserServices and Functions
-![bckendDBService](documents/idbServicesLayout.png)
+### webapp
 
-# User Security
-You will see that we are creating a AES256 Encrypted JWT, it is a bit lazy as to only use the password, cracking the encryption will then also be easier, in this application we are making use of the whole model of the user when registering, so we create a json object and then encrypt, to be a little bit more cheeky, the system uses a sanitized epoc value as the key and iv for the encryption, this epoc also makes up the userId column, you will see we sanitize the userId, extract the epoc value and feed the iv with it.
+Within the file **appsettings.json** the following had to be added:
 
-As we know the passphrase is a set byte[32] and the iv is a set byte[16], so how this works, we have a key in our config file "appsettings.json" -> "PrimaryLinkSection", we collect this and all the epoc value to the start, we then for passphrase substring to 32 and for the iv substring to 16, so we only have one entry point for a secret value and the user or a person does not know what is looking at, the epoc value in the db is the dynamic missing part that only internal developers knows about.
+```json
+"DefaultConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=db_UserController;Integrated Security=True"
+```
 
-Have a look, do some research and enjoy.
+### DB
 
-# Bonus Points
-The candidate will succeed if the application works, to give you the proverbial browny points, get the application to deploy in IIS, better yet if you can Linux in Docker. The Api already has a certificate, we can see this all through the application, tip go have a look at the webapp/assets/services/rest.service.ts we have a isDevelopment key when set to true we can have this ready for development and debugging, if set to false it is ready for IIS, your docker is a bit more complicated or is it? With docker I will suggest to do a .net runtime env, nginx webservice and a Docker MSSQL, keep in mind here that the ConnectionString should then talk to the container name and not the ip address. Just some ideas.
+```SQL
+USE [db_UserController]
+GO
 
-maybe to complicated give it a try.
+IF OBJECT_ID('users', 'U') IS NOT NULL
+	DROP TABLE [users];
 
-If you are good with debugging techniques and your are willing to try and not give up this should not be that difficult.
+GO
+
+CREATE TABLE [users]
+(
+	[id] INT IDENTITY(1,1) PRIMARY KEY,
+	[UserId] VARCHAR(50),
+	[UserName] VARCHAR(50),
+	[UserToken] VARCHAR(MAX),
+	[Epoc] VARCHAR(50),
+	[DateTime] DATETIME DEFAULT GETDATE()
+)
+
+```
+
+## Step 2: Deploy to IIS
+
+### Webconfig: API
+
+```XML
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <location path="." inheritInChildApplications="false">
+    <system.webServer>
+      <handlers>
+        <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+      </handlers>
+      <aspNetCore processPath="dotnet" arguments=".\UsersController.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" hostingModel="inprocess" />
+    </system.webServer>
+  </location>
+</configuration>
+<!--ProjectGuid: 43dcf7a6-2e8c-4050-97f0-a4f92fc92d51-->
+```
+
+### Webconfig: WEBAPP (For Angular Routing Module of IIS)
+
+```XML
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <system.webServer>
+    <staticContent>
+      <mimeMap fileExtension=".json" mimeType="application/json" />
+    </staticContent>
+    <rewrite>
+      <rules>
+        <rule name="Angular Routes" stopProcessing="true">
+          <match url=".*" />
+          <conditions logicalGrouping="MatchAll">
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="/index.html" />
+        </rule>
+      </rules>
+    </rewrite>
+  </system.webServer>
+</configuration>
+
+```
+
+## Step 3: Deploy to Docker
+
+### Dockerfile: API
+
+```Dockerfile
+# Use .NET SDK to build the project
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+COPY . ./
+RUN dotnet publish -c Release -o out
+
+# Use ASP.NET runtime to run the published app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/out .
+ENTRYPOINT ["dotnet", "UsersController.dll"]
+```
+
+### Dockerfile: WEBAPP
+
+```Dockerfile
+# Use Node.js to build Angular app
+FROM node:20 AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
+RUN npm run build --configuration=production
+
+# Use Nginx to serve the built Angular app
+FROM nginx:alpine
+COPY --from=build /app/dist/webapp /usr/share/nginx/html
+CMD ["nginx", "-g", "daemon off;"]
+```

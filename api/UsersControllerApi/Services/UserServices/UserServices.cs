@@ -190,7 +190,6 @@ namespace BaseProjectApi.Services.UserServices
 
         public async Task<ServiceModel> GetAllUsers(RequestModel uireq)
         {
-            var UserData = new ServiceModel();
             _result = new ServiceModel();
 
             try
@@ -203,7 +202,7 @@ namespace BaseProjectApi.Services.UserServices
             {
                 _result.Status = false;
                 _result.Code = 500;
-                _result.Message = $"LoginUser(): Exception: {ex}";
+                _result.Message = $"GetAllUsers(): Exception: {ex}";
             }
 
             return _result;
@@ -308,6 +307,27 @@ namespace BaseProjectApi.Services.UserServices
                 _result.Status = false;
                 _result.Code = 500;
                 _result.Message = $"LoginUser(): Exception: {ex}";
+            }
+
+            return _result;
+        }
+
+        public async Task<ServiceModel> UserLogout()
+        {
+            _result = new ServiceModel();
+
+            try
+            {
+                _result.Status = true;
+                _result.Code = 200;
+                _result.Message = $"LogoutUser(): Success you are Approved";
+
+            }
+            catch (Exception ex)
+            {
+                _result.Status = false;
+                _result.Code = 500;
+                _result.Message = $"LogoutUser(): Exception: {ex}";
             }
 
             return _result;
